@@ -116,8 +116,8 @@ void SerialPortWorker::handleTimeout()
                 return;
             } else {
                 isLastEmpty = false;
-                const auto& qstr = this->timeFirstByte.toString("yyyy-MM-dd\thh:mm:ss.zzz000");
-                //qDebug() << qstr;
+                const auto &qstr = this->timeFirstByte.toString("yyyy-MM-dd\thh:mm:ss.zzz000");
+
                 dataGet.emplace_back(qstr.toStdString(), m_commandData.data(), m_commandData.size());
                 m_commandData.clear();
             }

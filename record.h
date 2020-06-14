@@ -24,9 +24,9 @@ class Record
 public:
     Record(const std::string _data);
 
-    Record(const timeval& _time, const char*bytes, int size, TypeRecord _type = TypeRecord::EGM);
+    Record(const timeval& _time, const char* _bytes, int size, TypeRecord _type = TypeRecord::EGM);
 
-    Record(const std::string &_time, const char*bytes, int size, TypeRecord _type = TypeRecord::EGM);
+    Record(const std::string& _time, const char* _bytes, int size, TypeRecord _type = TypeRecord::EGM);
 
     friend std::ostream& operator<< (std::ostream& s, const Record& r);
 
@@ -37,6 +37,8 @@ public:
     timeval getTimePoint() const;
 
     std::string& getData();
+
+    bool isChirping() const;
 
 private:
 

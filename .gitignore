@@ -5,4 +5,5 @@ Makefile.*
 *.stash
 *.user
 depends
-
+moc_*
+COMUnitTest

@@ -33,7 +33,7 @@ Record::Record(const std::string _data):
     stringToData();
 }
 
-Record::Record(const timeval& _time, const char* bytes, int size, TypeRecord _type)
+Record::Record(const timeval& _time, const char* _bytes, int size, TypeRecord _type)
 {
     std::string str_time;
     char time_full[64];
@@ -42,11 +42,12 @@ Record::Record(const timeval& _time, const char* bytes, int size, TypeRecord _ty
     getStringTime(time_full, _time);
     str_time = time_full;
 
-    Record(str_time, bytes, size, _type);
+    Record(str_time, _bytes, size, _type);
 }
 
-Record::Record(const std::string& _time, const char* bytes, int size, TypeRecord _type)
+Record::Record(const std::string& _time, const char* _bytes, int size, TypeRecord _type)
 {
+
     data += _time;
     data += "\t";
 
@@ -58,12 +59,12 @@ Record::Record(const std::string& _time, const char* bytes, int size, TypeRecord
 
     data += "\t00000\t";
 
-
     for(int i = 0; i < size; ++i)
     {
-        char num1[8];
-        num1[0] = 0;
-        sprintf(num1, "%02X ", bytes[i]);
+        char num1[16] = {};
+        int _b = (int)_bytes[i];
+
+        sprintf(num1, "%02X ", _b);
         data += num1;
     }
 
@@ -88,6 +89,19 @@ timeval Record::getTimePoint() const
 std::string& Record::getData()
 {
     return data;
+}
+
+bool Record::isChirping() const
+{
+    bool result = false;
+
+    if( (bytes.size() > 3) && ( 0 < bytes[0] && bytes[0] < 10)
+            && (bytes[0] == bytes[1]) && (bytes[1] == bytes[2]) )
+    {
+        result = true;
+    }
+
+    return result;
 }
 
 void Record::stringToData()
@@ -126,7 +140,7 @@ void Record::stringToData()
             auto str1 = tokenBytes.nextToken();
             if(str1.size() > 0 && (str1 != " ")) {
                 bytes.push_back((unsigned char)std::stoul(str1.c_str(), nullptr, 16));
-            }
+            }            
         }
     }
 

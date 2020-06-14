@@ -93,17 +93,30 @@ void Runner::finishTest()
     std::cout << "void Runner::finishTest()" << std::endl;
     std::cout << "get data size=" << worker->getData().size() << std::endl;
 
+    bool isChirping = false;
     auto vec = worker->getData();
     for(auto iii = vec.begin(); iii != vec.end(); ++iii)
     {
+
+        if(iii->isChirping()) {
+            isChirping = true;
+            continue;
+        }
+
         std::cout << *iii;
-        if(iii != vec.begin())
+
+
+        if(iii != vec.begin() && !isChirping)
         {
             auto jjj = iii - 1;
             auto t1 = to_time_point(jjj->getTimePoint());
             auto t2 = to_time_point(iii->getTimePoint());
             std::cout << std::dec << " del=" << (int)duration_cast<milliseconds>(t2 - t1).count();
         }
+
+        if(isChirping)
+            isChirping = false;
+
         std::cout << std::endl;
     }
 
