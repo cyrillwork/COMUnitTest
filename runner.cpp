@@ -91,13 +91,37 @@ void Runner::run()
 void Runner::finishTest()
 {
     std::cout << "void Runner::finishTest()" << std::endl;
-
     std::cout << "get data size=" << worker->getData().size() << std::endl;
 
-    for(auto& iii: worker->getData()) {
-        std::cout << iii.getData() << std::endl;
-        std::cout << iii << std::endl;
+    auto vec = worker->getData();
+    for(auto iii = vec.begin(); iii != vec.end(); ++iii)
+    {
+        std::cout << *iii;
+        if(iii != vec.begin())
+        {
+            auto jjj = iii - 1;
+            auto t1 = to_time_point(jjj->getTimePoint());
+            auto t2 = to_time_point(iii->getTimePoint());
+            std::cout << std::dec << " del=" << (int)duration_cast<milliseconds>(t2 - t1).count();
+        }
+        std::cout << std::endl;
     }
+
+    std::cout << "etalon size=" << inputDataEGM.size() << std::endl;
+
+    for(auto iii = inputDataEGM.begin(); iii != inputDataEGM.end(); ++iii)
+    {
+        std::cout << *iii;
+        if(iii != inputDataEGM.begin())
+        {
+            auto jjj = iii - 1;
+            auto t1 = to_time_point(jjj->getTimePoint());
+            auto t2 = to_time_point(iii->getTimePoint());
+            std::cout << std::dec << " del=" << (int)duration_cast<milliseconds>(t2 - t1).count();
+        }
+        std::cout << std::endl;
+    }
+
 
     exit(0);
 }

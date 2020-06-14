@@ -137,7 +137,7 @@ std::ostream& operator<<(std::ostream& s, const Record& r) {
     //auto ttt = system_clock::to_time_t(r.timePoint);
     //auto ttt = high_resolution_clock::now() - r.timePoint;
 
-    s << std::dec << r.timePoint.tv_sec<<"."<< r.timePoint.tv_usec << " " << r.type << " " << std::dec << r.duration.count() << " ";
+    s << std::dec << r.timePoint.tv_sec<<"."<< r.timePoint.tv_usec << " " << r.type << " ";
 
     s << std::hex;
     for(const auto iii: r.bytes) {
