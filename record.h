@@ -39,6 +39,9 @@ public:
     std::string& getData();
 
 private:
+
+    void stringToData();
+
     std::string data;
     TypeRecord typeRecord;
 

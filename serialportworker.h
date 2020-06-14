@@ -40,6 +40,7 @@
 #include <QTimer>
 #include <QByteArray>
 #include <QObject>
+#include <QDateTime>
 
 #include <queue>
 #include "record.h"
@@ -78,6 +79,7 @@ signals:
     void finishTest();
 
 private:
+    QDateTime timeFirstByte;
     QSerialPort m_serialPort;
 
     QByteArray  m_readData;

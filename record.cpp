@@ -30,6 +30,68 @@ TypeRecord getTypeRecord(const std::string& s) {
 Record::Record(const std::string _data):
     data{_data}
 {
+    stringToData();
+}
+
+Record::Record(const timeval& _time, const char* bytes, int size, TypeRecord _type)
+{
+    std::string str_time;
+    char time_full[64];
+    time_full[0] = 0;
+
+    getStringTime(time_full, _time);
+    str_time = time_full;
+
+    Record(str_time, bytes, size, _type);
+}
+
+Record::Record(const std::string& _time, const char* bytes, int size, TypeRecord _type)
+{
+    data += _time;
+    data += "\t";
+
+    if(_type == TypeRecord::HOST) {
+        data += "HOST";
+    } else {
+        data += "EGM ";
+    }
+
+    data += "\t00000\t";
+
+
+    for(int i = 0; i < size; ++i)
+    {
+        char num1[8];
+        num1[0] = 0;
+        sprintf(num1, "%02X ", bytes[i]);
+        data += num1;
+    }
+
+    stringToData();
+}
+
+TypeRecord Record::getType() const
+{
+    return type;
+}
+
+std::vector<unsigned char>& Record::getBytes()
+{
+    return bytes;
+}
+
+timeval Record::getTimePoint() const
+{
+    return timePoint;
+}
+
+std::string& Record::getData()
+{
+    return data;
+}
+
+void Record::stringToData()
+{
     StringTokenizer token(data, "\t\n");
 
     timeval tv = {};
@@ -67,58 +129,8 @@ Record::Record(const std::string _data):
             }
         }
     }
-}
 
-Record::Record(const timeval& _time, const char* bytes, int size, TypeRecord _type)
-{
-    std::string str_time;
-    char time_full[64];
-    time_full[0] = 0;
 
-    getStringTime(time_full, _time);
-    str_time = time_full;
-
-    Record(str_time, bytes, size, _type);
-}
-
-Record::Record(const std::string& _time, const char* bytes, int size, TypeRecord _type)
-{
-    data += _time;
-
-    if(_type == TypeRecord::HOST) {
-        data += "HOST";
-    } else {
-        data += "EGM ";
-    }
-
-    for(int i = 0; i < size; ++i)
-    {
-        char num1[8];
-        num1[0] = 0;
-        sprintf(num1, "%02X ", bytes[i]);
-        data += num1;
-    }
-
-}
-
-TypeRecord Record::getType() const
-{
-    return type;
-}
-
-std::vector<unsigned char>& Record::getBytes()
-{
-    return bytes;
-}
-
-timeval Record::getTimePoint() const
-{
-    return timePoint;
-}
-
-std::string& Record::getData()
-{
-    return data;
 }
 
 std::ostream& operator<<(std::ostream& s, const Record& r) {

@@ -35,10 +35,8 @@
 
 #include <QCoreApplication>
 #include <QDebug>
-#include <QDateTime>
 
 #include <iostream>
-
 
 QT_USE_NAMESPACE
 
@@ -80,7 +78,7 @@ SerialPortWorker::SerialPortWorker(const char* namePort, std::vector<Record>& ho
     connect(this, SIGNAL(stopWriteTimer()),      &write_timer, SLOT(stop()) );
     connect(this, SIGNAL(startWriteTimer(int)),  &write_timer, SLOT(start(int)) );
 
-    read_timer.start(20);
+    read_timer.start(15);
     write_timer.start(100);
 }
 
@@ -95,6 +93,11 @@ QSerialPort* SerialPortWorker::getSerialPort()
 
 void SerialPortWorker::handleReadyRead()
 {
+    if( (m_commandData.size() == 0) && (m_readData.size() == 0))
+    {
+        timeFirstByte = QDateTime::currentDateTime();
+    }
+
     m_readData.append(m_serialPort.readAll());
 
     if (!read_timer.isActive())
@@ -113,18 +116,9 @@ void SerialPortWorker::handleTimeout()
                 return;
             } else {
                 isLastEmpty = false;
-
-                QDateTime local(QDateTime::currentDateTime());
-
-                const auto& qstr = local.toString("yyyy-MM-dd hh:mm:ss.zzz");
-
-                qDebug() << qstr;
-
-                //dataGet.emplace_back(local.toString("yyyy-MM-dd hh:mm:ss.zzz").toLocal8Bit().constData(),
-                //                    m_commandData.data(), m_commandData.size());
-
+                const auto& qstr = this->timeFirstByte.toString("yyyy-MM-dd\thh:mm:ss.zzz000");
+                //qDebug() << qstr;
                 dataGet.emplace_back(qstr.toStdString(), m_commandData.data(), m_commandData.size());
-
                 m_commandData.clear();
             }
         }
@@ -136,6 +130,7 @@ void SerialPortWorker::handleTimeout()
 
 void SerialPortWorker::writeTimeout()
 {
+
     //std::cout << "writeTimeout" << std::endl;
 
     if(!inputDataHost.empty()) {

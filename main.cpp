@@ -6,8 +6,6 @@
 #include <thread>
 
 #include "runner.h"
-//#include "port.h"
-//#include "serialportreader.h"
 
 int main(int argc, char *argv[])
 {

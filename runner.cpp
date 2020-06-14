@@ -88,7 +88,7 @@ void Runner::run()
     mainThread->start();
 }
 
-[[ noreturn ]] void Runner::finishTest()
+void Runner::finishTest()
 {
     std::cout << "void Runner::finishTest()" << std::endl;
 
@@ -96,6 +96,7 @@ void Runner::run()
 
     for(auto& iii: worker->getData()) {
         std::cout << iii.getData() << std::endl;
+        std::cout << iii << std::endl;
     }
 
     exit(0);
