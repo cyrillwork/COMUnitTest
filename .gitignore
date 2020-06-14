@@ -1,0 +1,8 @@
+*.o
+*.e
+Makefile
+Makefile.*
+*.stash
+*.user
+depends
+
