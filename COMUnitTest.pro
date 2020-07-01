@@ -45,3 +45,5 @@ HEADERS += \
     record.h \
     extern/stringtokenizer.h \
     serialportworker.h
+
+#DEFINES += SAS_TEST

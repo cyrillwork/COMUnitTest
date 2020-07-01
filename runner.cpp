@@ -6,7 +6,7 @@
 #include <chrono>
 #include <QCoreApplication>
 
-#define MAX_SIZE_LINE 2048
+#define MAX_SIZE_LINE 4096
 
 static high_resolution_clock::time_point to_time_point(timeval tv)
 {
@@ -91,17 +91,19 @@ void Runner::run()
 void Runner::finishTest()
 {
     std::cout << "void Runner::finishTest()" << std::endl;
-    std::cout << "get data size=" << worker->getData().size() << std::endl;
+    std::cout << std::dec << "get data size=" << worker->getData().size() << std::endl;
 
     bool isChirping = false;
     auto vec = worker->getData();
     for(auto iii = vec.begin(); iii != vec.end(); ++iii)
     {
 
+#ifdef SAS_TEST
         if(iii->isChirping()) {
             isChirping = true;
             continue;
         }
+#endif
 
         std::cout << *iii;
 
